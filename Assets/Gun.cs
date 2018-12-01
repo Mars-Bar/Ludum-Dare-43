@@ -19,6 +19,10 @@ public class Gun
 		if ((AmmoLeft <= 0) || (ProjectilePrefab == null))
 			return false;
 
+		if (GameStateManager.Instance.State != GameStateManager.GameState.Moving)
+			return false;
+
+		// check gun cooldown
 		return _lastFireTime + FireCooldown < Time.time;
 	}
 

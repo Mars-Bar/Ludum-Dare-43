@@ -8,7 +8,7 @@ public class SnapGrid
 	public Vector2 CellSize = Vector2.one;
 	public Vector2Int CellCount = new Vector2Int(10, 10);
 
-	public Vector2 GetCellCentre(Vector2Int coord, Space space = Space.World)
+	public Vector2 GetCellCorner(Vector2Int coord, Space space = Space.World)
 	{
 		Vector2 position = (space == Space.World) ? (Vector2)transform.position : Vector2.zero;
 		if (coord.x > CellCount.x || coord.y > CellCount.y)
@@ -21,17 +21,21 @@ public class SnapGrid
 			coord.x * CellSize.x,
 			coord.y * CellSize.y);
 
-		position += CellSize / 2.0f;
+		//position += CellSize / 2.0f;
 
 		return position;
 	}
 
-	public Vector2Int GetCoordFromPosition(Vector2 position, Space space = Space.World)
+	public Vector2Int GetCoordFromCenter(Vector2 position, Space space = Space.World)
+	{
+		position -= CellSize / 2.0f;
+		return GetCoordFromCorner(position, space);
+	}
+
+	public Vector2Int GetCoordFromCorner(Vector2 position, Space space = Space.World)
 	{
 		if(space == Space.World)
 			position -= (Vector2)transform.position;
-
-		position -= CellSize / 2.0f;
 
 		Vector2Int coord = new Vector2Int(
 			Mathf.RoundToInt(position.x / CellSize.x), 
@@ -43,10 +47,10 @@ public class SnapGrid
 		return coord;
 	}
 
-	public Vector2 SnapToCellMid(Vector2 position, Space space = Space.World)
+	public Vector2 SnapToCellCorner(Vector2 position, Space space = Space.World)
 	{
-		Vector2Int coord = GetCoordFromPosition(position, space);
+		Vector2Int coord = GetCoordFromCorner(position, space);
 
-		return GetCellCentre(coord, space);
+		return GetCellCorner(coord, space);
 	}
 }

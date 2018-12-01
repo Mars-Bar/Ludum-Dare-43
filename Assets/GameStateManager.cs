@@ -2,15 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameStateManager : MonoBehaviour {
+public class GameStateManager 
+	: MonoBehaviour
+{
+	private void Awake()
+	{
+		Instance = this;
+	}
 
-	// Use this for initialization
-	void Start () {
-		
+	public enum GameState
+	{
+		Moving,
+		Placing,
+		Paused,
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+	public static GameStateManager Instance;
+
+	public GameState State;
 }

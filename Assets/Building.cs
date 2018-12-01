@@ -9,6 +9,6 @@ public class Building
 
 	public Transform CreatePreview()
 	{
-		return Instantiate(Graphics, Graphics.position, Graphics.rotation);
+		return Instantiate(Graphics, Graphics.localPosition, Graphics.localRotation);
 	}
 }

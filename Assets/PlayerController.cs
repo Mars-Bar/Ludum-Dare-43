@@ -21,7 +21,7 @@ public class PlayerController
 
 	private bool CanMove()
 	{
-		return true;
+		return GameStateManager.Instance.State == GameStateManager.GameState.Moving;
 	}
 
 	private void Update ()

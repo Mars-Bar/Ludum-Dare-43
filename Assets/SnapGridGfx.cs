@@ -7,26 +7,25 @@ public class SnapGridGfx
 {
 	public SnapGrid Grid;
 
-	private Material _gridMaterial;
+	private SpriteRenderer _spriteRenderer;
 	
 	void Awake ()
 	{
-		MeshRenderer mr = GetComponent<MeshRenderer>();
-		_gridMaterial = mr.material;
+		_spriteRenderer = GetComponent<SpriteRenderer>();
 		UpdateGraphics();
 	}
 	
 	void UpdateGraphics()
 	{
 		Vector2 size = Grid.CellSize * Grid.CellCount;
-		transform.localScale = size;
+		transform.localScale = Grid.CellSize;
 		transform.localPosition = size / 2f;
 
-		_gridMaterial.mainTextureScale = Grid.CellCount;
+		_spriteRenderer.size = Grid.CellCount;
 	}
 
 	public void SetVisible(bool bVisible)
 	{
-		GetComponent<MeshRenderer>().enabled = bVisible;
+		_spriteRenderer.enabled = bVisible;
 	}
 }
