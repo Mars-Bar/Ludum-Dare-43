@@ -19,13 +19,10 @@ public class EnemyMovement
 	public delegate void PosDelegate(Vector2 pos);
 	public event PosDelegate OnTargetReached;
 
-	void SetTargetPosition(Vector2 pos)
+	public void SetTarget(Vector2 pos)
 	{
+		_targetPos = pos;
 		_reachedTarget = false;
-		if (OnTargetReached != null)
-		{
-			OnTargetReached(pos);
-		}
 	}
 	
 	void FixedUpdate ()
@@ -36,8 +33,9 @@ public class EnemyMovement
 		if (GameStateManager.Instance.State != GameStateManager.GameState.Moving)
 			return;
 
-		Vector2 vecToTarget = _targetPos - (Vector2)transform.position;
-		float distToTarget = vecToTarget.magnitude;
+		Vector2 dirToTarget = _targetPos - (Vector2)transform.position;
+		float distToTarget = dirToTarget.magnitude;
+		dirToTarget.Normalize();
 
 		if (distToTarget <= float.Epsilon)
 			return;
@@ -50,10 +48,12 @@ public class EnemyMovement
 			moveAmount = distToTarget;
 		}
 
-		_rigidbody.position += vecToTarget.normalized * moveAmount;
+		_rigidbody.rotation = Vector2.SignedAngle(Vector2.up, dirToTarget);
+		_rigidbody.position += dirToTarget * moveAmount;
 
 		if(bReachedTarget)
 		{
+			_reachedTarget = true;
 			OnTargetReached(_targetPos);
 		}
 	}

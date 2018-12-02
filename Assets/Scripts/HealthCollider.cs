@@ -2,13 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathManager 
+public class HealthCollider 
 	: MonoBehaviour
 {
-
-
-	void ConstructFromGrid(SnapGrid grid, GridObjectManager mgr)
-	{
-
-	}
+	public HealthComponent HealthObj;
 }

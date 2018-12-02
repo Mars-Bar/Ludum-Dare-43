@@ -6,6 +6,16 @@ using UnityEngine;
 public class GridObjectManager 
 	: MonoBehaviour
 {
+	private void Awake()
+	{
+		foreach (var obj in FindObjectsOfType<GridObject>())
+		{
+			if (obj.AutoAddToGrid)
+			{
+				_gridObjects.Add(new GridObjectData(obj, PlacementGrid.GetCoordFromCorner(obj.transform.position)));
+			}
+		}
+	}
 	public SnapGrid PlacementGrid;
 
 	[System.Serializable]
@@ -21,6 +31,15 @@ public class GridObjectManager
 	}
 	private List<GridObjectData> _gridObjects = new List<GridObjectData>();
 
+	public delegate void ObjectEvent(GridObject obj);
+	public event ObjectEvent OnObjectAdded;
+	public event ObjectEvent OnObjectHealthChanged;
+
+	public void ObjectHealthChanged(GridObject obj)
+	{
+		OnObjectHealthChanged(obj);
+	}
+
 	public bool IsOccupied(Vector2Int startCoord, IEnumerable<Vector2Int> relativeCoords)
 	{
 		foreach(Vector2Int relCoord in relativeCoords)
@@ -34,12 +53,17 @@ public class GridObjectManager
 
 	public GridObject GetObjectFromCoord(Vector2Int newCoord)
 	{
+		return GetObjectFromCoord(newCoord.x, newCoord.y);
+	}
+
+	public GridObject GetObjectFromCoord(int x, int y)
+	{
 		foreach (GridObjectData data in _gridObjects)
 		{
 			foreach (Vector2Int relCoord in data.Object.OccupiedTiles)
 			{
 				Vector2Int coord = data.Coord + relCoord;
-				if (coord == newCoord)
+				if (coord.x == x && coord.y == y)
 					return data.Object;
 			}
 		}
@@ -51,5 +75,10 @@ public class GridObjectManager
 		Debug.Assert(GetObjectFromCoord(coord) == null);
 
 		_gridObjects.Add(new GridObjectData(obj, coord));
+
+		if(OnObjectAdded != null)
+		{
+			OnObjectAdded(obj);
+		}
 	}
 }

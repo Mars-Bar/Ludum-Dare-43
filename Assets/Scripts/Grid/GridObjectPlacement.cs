@@ -71,7 +71,7 @@ public class GridObjectPlacement
 		// Update preview
 		Vector2 position = HelperFuncs.GetMousePositionWorld();
 
-		Vector2Int gridCoord = Grid.GetCoordFromCenter(position);
+		Vector2Int gridCoord = Grid.GetCoordFromCentre(position);
 		position = Grid.GetCellCorner(gridCoord);
 
 		bool isOccupied = GridObjMgr.IsOccupied(gridCoord, ObjectPrefab.OccupiedTiles);

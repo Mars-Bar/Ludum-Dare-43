@@ -37,6 +37,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4426669963240684}
   - component: {fileID: 114111133298361372}
+  - component: {fileID: 50924382482559512}
+  - component: {fileID: 114403432792610998}
+  - component: {fileID: 114124160620433660}
   m_Layer: 0
   m_Name: Building
   m_TagString: Untagged
@@ -113,6 +116,26 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1613602144685606}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!50 &50924382482559512
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1668873751925600}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!114 &114111133298361372
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -124,6 +147,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2adf2619ecd3ac84993540da70b7f2f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AutoAddToGrid: 0
   OccupiedTiles:
   - {x: 0, y: 0}
   Graphics: {fileID: 4420224161420940}
+--- !u!114 &114124160620433660
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1668873751925600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af22aadaca57f3640aed736a5d923f35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Width: 1
+  Height: 1
+  Anchor: 0
+--- !u!114 &114403432792610998
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1668873751925600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff29e4be39a46e147a04c34784f7b49a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 10
+  _maxHealth: 10

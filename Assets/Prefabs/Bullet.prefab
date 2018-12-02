@@ -22,7 +22,8 @@ GameObject:
   - component: {fileID: 70127615873908238}
   - component: {fileID: 114053750808523284}
   - component: {fileID: 50419843886892302}
-  m_Layer: 0
+  - component: {fileID: 114377180854417180}
+  m_Layer: 8
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +40,7 @@ GameObject:
   - component: {fileID: 4774056218666552}
   - component: {fileID: 33519189391900016}
   - component: {fileID: 23225268046158524}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,3 +162,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589b55ebb7918c849bc8b0423895a9ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LifeTime: 1
+--- !u!114 &114377180854417180
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1042350598002864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6096490bccbfcf745bd918adcd5ce0e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Amount: 1
+  DestroyOnCollision: 0
+  DestroyOnDamage: 1
