@@ -70,6 +70,40 @@ public class GridObjectManager
 		return null;
 	}
 
+	public Vector2Int[] GetCoordsFromObject(GridObject obj)
+	{
+		Vector2Int[] coords = null;
+		foreach (GridObjectData data in _gridObjects)
+		{
+			if (data.Object == obj)
+			{
+				coords = new Vector2Int[obj.OccupiedTiles.Count];
+				for (int i = 0; i < obj.OccupiedTiles.Count; ++i)
+				{
+					coords[i] = data.Coord + obj.OccupiedTiles[i];
+				}
+				break;
+			}
+		}
+		return coords;
+	}
+
+	public Vector2[] GetPositionsFromObject(GridObject obj)
+	{
+		Vector2Int[] coords = GetCoordsFromObject(obj);
+		if (coords == null)
+			return null;
+
+		Vector2[] positions = new Vector2[coords.Length];
+
+		for(int i = 0; i < coords.Length; ++i)
+		{
+			positions[i] = PlacementGrid.GetCellCentre(coords[i]);
+		}
+
+		return positions;
+	}
+
 	public void AddObject(GridObject obj, Vector2Int coord)
 	{
 		Debug.Assert(GetObjectFromCoord(coord) == null);

@@ -9,12 +9,16 @@ public class Damage
 	public bool DestroyOnCollision = false;
 	public bool DestroyOnDamage = false;
 
+	public GameObject RootObject;
+
+	public HealthComponent.Team Side;
+
 	private void DoDamage(Collider2D col)
 	{
 		bool bDestroy = false;
 		HealthCollider healthCol = col.GetComponent<HealthCollider>();
 		HealthComponent health = healthCol == null ? null : healthCol.HealthObj;
-		if (health != null)
+		if (health != null && health.Side != Side)
 		{
 			health.Health -= Amount;
 			bDestroy = DestroyOnDamage;
@@ -24,7 +28,7 @@ public class Damage
 			bDestroy = DestroyOnCollision;
 		}
 		if (bDestroy)
-			Destroy(gameObject);
+			Destroy(RootObject == null ? gameObject : RootObject);
 	}
 
 	private void OnTriggerEnter2D(Collider2D col)

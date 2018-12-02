@@ -42,7 +42,14 @@ public class HealthComponent
 	private float _health = 10;
 	[SerializeField]
 	private float _maxHealth = 10;
-	
+
+	public enum Team
+	{
+		Friend,
+		Enemy,
+	}
+	public Team Side;
+
 	protected virtual void Death()
 	{
 		Destroy(gameObject);

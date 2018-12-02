@@ -8,7 +8,7 @@ public class PathingAgent
 	protected virtual void Awake()
 	{
 		_movement = GetComponent<EnemyMovement>();
-		_enemyAttack = GetComponent<EnemyAttack>();
+		_enemyAttack = GetComponent<AttackComponent>();
 
 		_movement.OnTargetReached += OnWaypointReached;
 
@@ -18,9 +18,15 @@ public class PathingAgent
 		_nextTarget = _endTarget = transform.position;
 	}
 
+	private void OnDestroy()
+	{ 
+		_pathMgr.OnPathingChanged -= OnPathingChanged;
+		_movement.OnTargetReached -= OnWaypointReached;
+	}
+
 	PathManager _pathMgr;
 	EnemyMovement _movement;
-	EnemyAttack _enemyAttack;
+	AttackComponent _enemyAttack;
 	Vector2 _endTarget;
 	Vector2 _nextTarget;
 
@@ -56,7 +62,7 @@ public class PathingAgent
 
 		CurrentPath = new LinkedList<Vector2>();
 
-		List<Vector2Int> coordList = _pathMgr.FindPath(startCoord, endCoord, _enemyAttack.BlockageDPS);
+		List<Vector2Int> coordList = _pathMgr.FindPath(startCoord, endCoord, _enemyAttack.DPS, _movement.MovementSpeed);
 		if (coordList != null && coordList.Count > 0)
 		{
 			for (int i = 0; i < coordList.Count; ++i)

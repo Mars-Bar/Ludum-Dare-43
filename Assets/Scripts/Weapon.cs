@@ -2,19 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gun 
+public class Weapon 
 	: MonoBehaviour
 {
 	public Transform BulletParent;
 	public Transform BulletSpawnPos;
-	public Bullet ProjectilePrefab;
+	public Projectile ProjectilePrefab;
+
+	public bool HasAmmo = true;
 	public int AmmoLeft = 100;
-	public float Power = 15;
+	
+	public float ProjectileSpeed = 15;
 	public float FireCooldown = 0.1f;
+	public float DmgPerSec = 1f;
 
 	private float _lastFireTime = 0f;
 
-	private bool CanShoot()
+	public virtual bool CanShoot()
 	{
 		if ((AmmoLeft <= 0) || (ProjectilePrefab == null))
 			return false;
@@ -26,7 +30,7 @@ public class Gun
 		return _lastFireTime + FireCooldown < Time.time;
 	}
 
-	public void Shoot()
+	public void Shoot(HealthComponent.Team mySide)
 	{
 		if (!CanShoot())
 			return;
@@ -47,7 +51,11 @@ public class Gun
 		}
 
 		// Spawn bullet
-		Bullet newBullet = Instantiate(ProjectilePrefab, spawnPosition, spawnRotation, BulletParent);
+		Projectile newBullet = Instantiate(ProjectilePrefab, spawnPosition, spawnRotation, BulletParent);
+
+		Damage dmg = newBullet.GetComponentInChildren<Damage>();
+		dmg.Amount = DmgPerSec * FireCooldown;
+		dmg.Side = mySide;
 
 		// Fire Bullet
 		FireBullet(newBullet);
@@ -56,14 +64,14 @@ public class Gun
 		--AmmoLeft;
 	}
 
-	private void FireBullet(Bullet bullet)
+	private void FireBullet(Projectile bullet)
 	{
 		Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
 		if (!bulletRb)
 			return;
 
 		// Fire bullet
-		bulletRb.AddForce(Power * bullet.transform.up, ForceMode2D.Impulse);
+		bulletRb.velocity = ProjectileSpeed * bullet.transform.up;
 
 		_lastFireTime = Time.time;
 	}

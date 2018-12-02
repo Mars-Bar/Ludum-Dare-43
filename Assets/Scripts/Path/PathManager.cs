@@ -39,7 +39,7 @@ public class PathManager
 		OnPathingChanged();
 	}
 
-	public List<Vector2Int> FindPath(Vector2Int start, Vector2Int end, float blockageDPS)
+	public List<Vector2Int> FindPath(Vector2Int start, Vector2Int end, float dps, float moveSpeed)
 	{
 		if (!Initialized)
 			return null;
@@ -47,11 +47,14 @@ public class PathManager
 		PathNode startNode = _nodes[start.x, start.y];
 		PathNode endNode = _nodes[end.x, end.y];
 
-		List<PathNode> nodeList = FindPath(startNode, endNode, blockageDPS);
+		List<PathNode> nodeList = FindPath(startNode, endNode, dps, moveSpeed);
 
 		List<Vector2Int> result = new List<Vector2Int>();
 		for(int i = 0; i < nodeList.Count; ++i)
 		{
+			if (nodeList[i] == startNode)
+				continue;
+
 			result.Add(nodeList[i].Position);
 		}
 
@@ -104,12 +107,8 @@ public class PathManager
 
 					PathNode.Neighbour neighbour = new PathNode.Neighbour();
 					neighbour.Node = _nodes[nX, nY];
-					neighbour.DistanceFactor = n.magnitude;
-					if(neighbour.DistanceFactor > 1.1)
-					{
-						// reduce the distance factor slightly for diagonals
-						neighbour.DistanceFactor -= 0.05f;
-					}
+					// distance is 1.4 for diagonals, 1.0 for straights
+					neighbour.Distance = n.sqrMagnitude > 1.1f ? 1.4f : 1.0f;
 					node.Neighbours.Add(neighbour);
 				}
 			}
@@ -163,7 +162,7 @@ public class PathManager
 		return null;
 	}
 
-	private List<PathNode> FindPath(PathNode start, PathNode end, float blockageDPS)
+	private List<PathNode> FindPath(PathNode start, PathNode end, float blockageDPS, float moveSpeed)
 	{
 		if(NeedToUpdateCosts)
 		{
@@ -211,7 +210,13 @@ public class PathManager
 
 				float costToEnter = node.CostToEnter;
 				if (node.BlockageHealth > 0)
+				{
 					costToEnter += node.BlockageHealth /= blockageDPS;
+				}
+				if(neighbours[i].Distance > 0f)
+				{
+					costToEnter += neighbours[i].Distance / moveSpeed;
+				}
 				float newG = nodeInfo.G + costToEnter;
 
 				// Check if in open set

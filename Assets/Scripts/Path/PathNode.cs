@@ -7,7 +7,7 @@ public class PathNode
 	public struct Neighbour
 	{
 		public PathNode Node;
-		public float DistanceFactor;
+		public float Distance;
 	}
 	public float CostToEnter = 0;
 	public float BlockageHealth = 0;

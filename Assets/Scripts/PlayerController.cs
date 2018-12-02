@@ -12,7 +12,7 @@ public class PlayerController
 
 	public float MoveSpeed = 1f;
 
-	public Gun ActiveGun;
+	public Weapon ActiveGun;
 
 	private Vector2 _moveInput;
 	private Vector2 _mousePosition;
@@ -62,7 +62,7 @@ public class PlayerController
 
 		if(Input.GetButton("Fire1"))
 		{
-			ActiveGun.Shoot();
+			ActiveGun.Shoot(HealthComponent.Team.Friend);
 		}
 	}
 }
