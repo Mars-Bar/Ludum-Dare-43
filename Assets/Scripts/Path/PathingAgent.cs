@@ -13,14 +13,15 @@ public class PathingAgent
 		_movement.OnTargetReached += OnWaypointReached;
 
 		_pathMgr = FindObjectOfType<PathManager>();
-		_pathMgr.OnPathingChanged += OnPathingChanged;
+		_pathMgr.PathingAgents.Add(this);
+		//_pathMgr.OnPathingChanged += OnPathingChanged;
 
 		_nextTarget = _endTarget = transform.position;
 	}
 
 	private void OnDestroy()
-	{ 
-		_pathMgr.OnPathingChanged -= OnPathingChanged;
+	{
+		_pathMgr.PathingAgents.Remove(this);
 		_movement.OnTargetReached -= OnWaypointReached;
 	}
 
@@ -48,12 +49,7 @@ public class PathingAgent
 		UpdatePath();
 	}
 
-	void OnPathingChanged()
-	{
-		UpdatePath();
-	}
-
-	void UpdatePath()
+	public void UpdatePath()
 	{
 		SnapGrid snapGrid = SnapGrid.Instance;
 

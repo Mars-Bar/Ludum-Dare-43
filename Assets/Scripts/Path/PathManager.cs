@@ -14,29 +14,27 @@ public class PathManager
 	private void Start()
 	{
 		ConstructFromGrid();
+		UpdateCosts();
 		Initialized = true;
-		if(OnPathingChanged != null)
-			OnPathingChanged();
 
 		_gridMgr.OnObjectAdded += OnGridObjectModified;
 		_gridMgr.OnObjectHealthChanged += OnGridObjectModified;
 	}
-
-	public delegate void InitDelegate();
-	public event InitDelegate OnPathingChanged;
+	
 	public bool Initialized { get; private set; }
 
 	public static PathManager Instance { get; private set; }
-
+	
 	public bool NeedToUpdateCosts = true;
 	private GridObjectManager _gridMgr;
 	PathHeuristic _heuristic = new ManhattanHeuristic();
 	private PathNode[,] _nodes;
+
+	public HashSet<PathingAgent> PathingAgents = new HashSet<PathingAgent>();
 	
 	private void OnGridObjectModified(GridObject obj)
 	{
 		NeedToUpdateCosts = true;
-		OnPathingChanged();
 	}
 
 	public List<Vector2Int> FindPath(Vector2Int start, Vector2Int end, float dps, float moveSpeed)
@@ -115,7 +113,6 @@ public class PathManager
 		}
 
 		NeedToUpdateCosts = true;
-		OnPathingChanged();
 	}
 
 	public void UpdateCosts()
@@ -164,10 +161,9 @@ public class PathManager
 
 	private List<PathNode> FindPath(PathNode start, PathNode end, float blockageDPS, float moveSpeed)
 	{
-		if(NeedToUpdateCosts)
-		{
-			UpdateCosts();
-		}
+		List<PathNode> result = new List<PathNode>();
+		if (start == end)
+			return result;
 
 		PathingInfo startInfo = new PathingInfo(start);
 		startInfo.G = 0;
@@ -263,12 +259,24 @@ public class PathManager
 		}
 
 		// construct the result path
-		List<PathNode> result = new List<PathNode>();
 		while (endInfo != null)
 		{
 			result.Insert(0, endInfo.node);
 			endInfo = endInfo.parent;
 		}
+		//Debug.Log("Path Length" + result.Count.ToString());
 		return result;
+	}
+
+	private void LateUpdate()
+	{
+		if (NeedToUpdateCosts)
+		{
+			UpdateCosts();
+			foreach(PathingAgent agent in PathingAgents)
+			{
+				agent.UpdatePath();
+			}
+		}
 	}
 }

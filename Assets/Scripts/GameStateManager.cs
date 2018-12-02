@@ -20,4 +20,6 @@ public class GameStateManager
 	public static GameStateManager Instance;
 
 	public GameState State;
+
+	public float GlobalSpawnRate = 1f;
 }

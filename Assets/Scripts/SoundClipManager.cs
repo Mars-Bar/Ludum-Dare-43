@@ -9,6 +9,10 @@ public class SoundClipManager
 	{
 		None,
 		ZombieGroan,
+		ZombieDie,
+		Blowdart,
+		Arrow,
+		PlayerDie,
 	}
 
 	[System.Serializable]

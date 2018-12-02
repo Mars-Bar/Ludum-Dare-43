@@ -5,9 +5,17 @@ using UnityEngine;
 public class Weapon 
 	: MonoBehaviour
 {
+	private void Awake()
+	{
+		_audioSource = GetComponent<AudioSource>();
+		_soundClipManager = FindObjectOfType<SoundClipManager>();
+	}
+
 	public Transform BulletParent;
 	public Transform BulletSpawnPos;
 	public Projectile ProjectilePrefab;
+
+	private AudioSource _audioSource;
 
 	public bool HasAmmo = true;
 	public int AmmoLeft = 100;
@@ -17,6 +25,9 @@ public class Weapon
 	public float DmgPerSec = 1f;
 
 	private float _lastFireTime = 0f;
+
+	public SoundClipManager.SoundID SoundEffectID;
+	SoundClipManager _soundClipManager;
 
 	public virtual bool CanShoot()
 	{
@@ -59,6 +70,15 @@ public class Weapon
 
 		// Fire Bullet
 		FireBullet(newBullet);
+
+		if (_audioSource != null)
+		{
+			// Play sound
+			AudioClip clip = _soundClipManager.GetRandomSoundEffect(SoundEffectID);
+			if(clip != null)
+				_audioSource.PlayOneShot(clip);
+		}
+
 
 		// Spend Ammo
 		--AmmoLeft;
